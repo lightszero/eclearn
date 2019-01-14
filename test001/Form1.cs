@@ -109,17 +109,33 @@ namespace test001
 
         private void button4_Click(object sender, EventArgs e)
         {
-            var N = int.Parse(this.textBox3.Text);
-            var eles = new ECElement[this.listBox3.Items.Count];
-            for (var i = 0; i < this.listBox3.Items.Count; i++)
+            try
             {
-                eles[i] = this.listBox3.Items[i] as ECElement;
+                var N = int.Parse(this.textBox3.Text);
+                var eles = new ECElement[this.listBox3.Items.Count];
+                for (var i = 0; i < this.listBox3.Items.Count; i++)
+                {
+                    eles[i] = this.listBox3.Items[i] as ECElement;
+                }
+                var bytes = ECSplit.JoinDataWithBFTN(eles, N);
+                var endpos = bytes.Length;
+                for (var i = 0; i < bytes.Length; i++)
+                {
+                    if (bytes[i] == 0)
+                    {
+                        endpos = i;
+                        break;
+                    }
+                }
+                var base64str = System.Text.Encoding.UTF8.GetString(bytes, 0, endpos);
+                var srcbyte = Convert.FromBase64String(base64str);
+                var info = System.Text.Encoding.UTF8.GetString(srcbyte);
+                this.label2.Text = info;
             }
-            var bytes = ECSplit.JoinDataWithBFTN(eles, N);
-            var base64str = System.Text.Encoding.UTF8.GetString(bytes);
-            var srcbyte = Convert.FromBase64String(base64str);
-            var info = System.Text.Encoding.UTF8.GetString(srcbyte);
-            this.label2.Text = info;
+            catch(Exception err)
+            {
+                MessageBox.Show("join fail:" + err.ToString());
+            }
         }
 
         private void button5_Click(object sender, EventArgs e)

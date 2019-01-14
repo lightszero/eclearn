@@ -82,7 +82,7 @@ namespace test001
                 for (var j = 0; j < blocksize; j++)
                 {
                     var srcindex = blocksize * i + j;
-                    if (srcindex <= srcdata.Length)
+                    if (srcindex < srcdata.Length)
                     {
                         data[j] = srcdata[srcindex];
                     }
